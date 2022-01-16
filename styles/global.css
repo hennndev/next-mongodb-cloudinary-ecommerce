@@ -1,0 +1,64 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+@layer components {
+    .container {
+        @apply max-w-6xl mx-auto
+    }
+    .flex-between {
+        @apply flex items-center justify-between
+    }
+    .flex-center {
+        @apply flex items-center justify-center
+    }
+    .link {
+        @apply font-medium text-sm md:text-base text-gray-700 hover:text-blue-600 hover:underline
+    }
+    .btn {
+        @apply bg-blue-500 text-white rounded p-2 cursor-pointer w-full transition duration-200 hover:bg-blue-600
+    }
+    .btn-loading {
+        @apply bg-gray-600 cursor-not-allowed hover:bg-gray-600
+    }
+    .input-control {
+        @apply flex flex-col mb-4
+    }
+    .form-input {
+        @apply bg-gray-50 rounded p-2 outline-none shadow-sm text-gray-600 focus:bg-blue-100
+    }
+    .text-error {
+        @apply text-sm text-red-400
+    }
+    .pending {
+        @apply text-gray-600
+    }
+    .cancelled {
+        @apply text-red-600
+    }
+    .shipped {
+        @apply text-purple-500
+    }
+    .awaiting-payment {
+        @apply text-blue-500
+    }
+    .in-progress {
+        @apply text-yellow-700
+    }
+    .delivered {
+        @apply text-green-600
+    }
+    .w-200 {
+        @apply w-[200px] !important
+    }
+    .form-loading {
+        @apply absolute top-0 left-0 bottom-0 right-0 bg-gray-100 opacity-10 animate-pulse
+    }
+    .th-table {
+        @apply px-3 py-2 text-xs text-gray-500
+    }
+    .td-table {
+        @apply px-3 py-4 text-sm
+    }
+}
