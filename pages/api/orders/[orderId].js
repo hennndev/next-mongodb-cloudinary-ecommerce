@@ -3,9 +3,9 @@ import { ObjectId } from "mongodb";
 
 
 export default async function handler(req, res) {
-    const client = await clientPromise
 
     if(req.method === 'POST') {
+        const client = await clientPromise
         const db = client.db()
         const { newStatus } = req.body
         const { orderId } = req.query 
@@ -16,6 +16,7 @@ export default async function handler(req, res) {
     }
 
     if(req.method === 'DELETE') {
+        const client = await clientPromise
         const db = client.db()
         const { orderId } = req.query 
 

@@ -5,9 +5,9 @@ import { ObjectId } from 'mongodb'
 
 export default async function handler(req, res) {
 
-    const client = await clientPromise
 
     if(req.method === 'POST') {
+        const client = await clientPromise
         const db = client.db()
         const { createdAt, name, price, description, image, status, checkImg } = req.body
         const { productId } = req.query
@@ -38,6 +38,7 @@ export default async function handler(req, res) {
     }   
 
     if(req.method === 'GET') {
+        const client = await clientPromise
         const db = client.db()
         const { productId } = req.query
         const product = await db.collection('products').findOne(ObjectId(productId))
