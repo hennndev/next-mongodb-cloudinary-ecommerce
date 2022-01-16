@@ -31,8 +31,8 @@ export default async function handler(req, res) {
 
     
     if(req.method === 'DELETE') {
+        const client = await clientPromise
         const db = client.db()
-
         cloudinary.config({ 
             cloud_name: process.env.CLOUD_NAME, 
             api_key: process.env.CLOUD_API_KEY, 
