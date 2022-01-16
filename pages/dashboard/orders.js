@@ -1,11 +1,12 @@
 import React, { useState } from 'react'
 import Head from 'next/head'
+import moment from 'moment'
 import Image from 'next/image'
+import Router from 'next/router'
+import { utilSort } from 'utils/utils'
 import Modal from '@/components/UI/Modal'
 import NoData from '@/components/UI/NoData'
 import { getSession } from 'next-auth/react'
-import moment from 'moment'
-import { utilSort } from 'utils/utils'
 import EditOrders from '@/components/Dashboard/EditOrders'
 import { SwitchVerticalIcon } from '@heroicons/react/outline'
 import SearchInput from '@/components/UI/SearchInput'
@@ -34,6 +35,14 @@ const Orders = ({data}) => {
             moment(order.createdAt).format('LLL').toLowerCase().includes(searchTerm.toLowerCase().trim()) ||
             (order.status === 'pending' ? 'new' : order.status).toLowerCase().includes(searchTerm.toLowerCase().trim())
     })
+
+    const deleteOrder = (id) => {
+        fetch(`/api/orders/${id}`, {
+            method: 'DELETE'
+        }).then((res) => res.json()).then(() => {
+            Router.replace('/dashboard/orders')
+        })
+    }
 
 
 
@@ -160,8 +169,9 @@ const Orders = ({data}) => {
                                             </button>
                                         </td>
                                         <td className="td-table text-center">
-                                            <button className="btn px-4 py-1 w-max bg-gray-400 hover:bg-gray-400 cursor-not-allowed" disabled>
-                                                Not Allowed
+                                            <button className={`btn px-4 py-1 w-max ${data.status !== 'cancelled' ? 'bg-gray-400 hover:bg-gray-400 cursor-not-allowed' : 'bg-red-400 hover:bg-red-500 cursor-pointer'}`} disabled={data.status !== 'cancelled'}
+                                            onClick={() => deleteOrder(data._id)}>
+                                                {data.status === 'cancelled' ? 'Delete' : 'Not Allowed'}
                                             </button>
                                         </td>
                                     </tr>
@@ -187,7 +197,6 @@ export const getServerSideProps =  async(ctx) => {
     const data = await res.json()
 
     const session = await getSession(ctx)
-
     if(session?.user?.email !== 'admin@admin.com') {
         return {
             redirect: {

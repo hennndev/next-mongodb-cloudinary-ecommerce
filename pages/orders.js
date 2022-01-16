@@ -1,12 +1,14 @@
 import React, { useState } from 'react'
 import Head from 'next/head'
-import Image from 'next/image'
-import { getSession } from 'next-auth/react'
 import moment from 'moment'
-import Modal from '@/components/UI/Modal'
+import Image from 'next/image'
 import Router from 'next/router'
-import { statusColors } from 'consts/consts'
+import Modal from '@/components/UI/Modal'
+import { getSession } from 'next-auth/react'
+import RequestModal from '@/components/UI/RequestModal'
+import SuccessModal from '@/components/UI/SuccessModal'
 import { XCircleIcon, QuestionMarkCircleIcon, TrashIcon, CheckCircleIcon } from '@heroicons/react/outline'
+import NoData from '@/components/UI/NoData'
 
 const Orders = ({data}) => {
 
@@ -39,12 +41,11 @@ const Orders = ({data}) => {
     }
 
 
-    console.log(data)
-
     return (
         <>
             <Head>
                 <title>Orders | TheSneakers</title>
+                <link rel="icon" href="/favicon.ico" />
             </Head>
             {isCancel && (
                 <Modal>
@@ -66,9 +67,9 @@ const Orders = ({data}) => {
                 </Modal>
             )}
             <section className="my-6">
-                <h1 className="text-center text-blue-400 text-2xl font-medium mb-5 underline">My Orders</h1>
-                <div className='flex flex-col space-y-7'>
-                   {data.map(order => (
+                {data.length > 0 && <h1 className="text-center text-blue-400 text-2xl font-medium mb-5 underline">My Orders</h1>}
+                <div className='flex flex-col space-y-10'>
+                   {data.length > 0 ? data.map(order => (
                         <div className='bg-white shadow-md rounded p-5 flex flex-col' key={order._id}>
                             <h1 className='mb-3'>Order Id: 
                                 <span className='font-medium bg-blue-50 rounded-full p-2 leading-10'>   {order.order_id}
@@ -112,7 +113,7 @@ const Orders = ({data}) => {
                                     </div>
                                 ))}
                             </div>
-                            {order.status !== 'cancelled' || order.status === 'pending' || order.status === 'in-progress' ? (
+                            {order.status === 'pending' || order.status === 'in-progress' ? (
                                 <>
                                     <div className='text-white flex items-center space-x-3 w-max bg-red-500 rounded-md cursor-pointer py-[8px] px-[10px] hover:bg-red-600 transition duration-300 mt-7' onClick={() => setIsCancel(order._id)}>
                                         <XCircleIcon className='h-7'/>
@@ -126,18 +127,24 @@ const Orders = ({data}) => {
                                     </p>
                                 </>
                             ) : (
-                                <div className="flex items-center space-x-4 mt-7">
-                                    <div className={`text-white w-max bg-gray-500 rounded-md py-[8px] px-[10px] transition duration-300`}>
-                                        <p className='font-medium'>{order.status[0].toUpperCase() + order.status.slice(1)}</p>
+                                order.status === 'cancelled' || order.status === 'delivered' ? (
+                                    <div className="flex items-center space-x-4 mt-7">
+                                        <p className={`font-medium bg-gray-50 shadow-md w-max py-[8px] px-[10px] transition duration-300 ${order.status}`}>
+                                            {order.status[0].toUpperCase() + order.status.slice(1)}
+                                        </p>
+                                        <button className='btn bg-red-500 hover:bg-red-600 w-max flex items-center' onClick={() => removeOrder(order._id)}>
+                                            <TrashIcon className='h-5 mr-2'/>
+                                            Remove
+                                        </button>
                                     </div>
-                                    <button className='btn bg-red-500 hover:bg-red-600 w-max flex items-center' onClick={() => removeOrder(order._id)}>
-                                        <TrashIcon className='h-5 mr-2'/>
-                                        Remove
-                                    </button>
-                                </div>
+                                ) : (
+                                    <p className={`font-medium bg-gray-50 shadow-md w-max py-[8px] px-[10px] transition duration-300 text-gray-700 animate-bounce mt-7`}>
+                                        Relax, this products will arrived :)
+                                    </p>
+                                )
                             )}
                         </div>
-                   ))}
+                   )) : <NoData title='No Orders'/>}
                 </div>
             </section>
         </>

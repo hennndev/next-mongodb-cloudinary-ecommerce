@@ -16,7 +16,6 @@ const NavHeader = ({classes, mobile, handleClose, cart, setOpenCart, handleLogou
     return (
         <nav className={classes}>
             <p className='link cursor-pointer' onClick={() => handleLink('/')}>Store</p>
-            <p className='link cursor-pointer' onClick={() => handleLink('/about')}>About</p>
             {session?.user && session?.user?.email !== "admin@admin.com" && (
                 <p className='link cursor-pointer' onClick={() => handleLink('/orders')}>My Orders</p>
             )}

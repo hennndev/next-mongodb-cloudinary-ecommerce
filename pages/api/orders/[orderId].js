@@ -12,7 +12,7 @@ export default async function handler(req, res) {
 
 
         await db.collection('orders').updateOne({"_id": ObjectId(orderId)}, { $set: { "status" : newStatus }})
-        res.status(200).json({message: 'Success update data order', data: {status: 'cancelled'}})
+        res.status(200).json({message: 'Success update data order', status: 'cancelled'})
     }
 
     if(req.method === 'DELETE') {

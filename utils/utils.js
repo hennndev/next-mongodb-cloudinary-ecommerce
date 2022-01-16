@@ -18,3 +18,11 @@ export const utilSort = (data, isSort, dataSort) => {
         }
     })
 }
+
+
+export const fetchAPI = async() => {
+    const res = await fetch('/api/products')
+    const data = await res.json()
+
+    return data
+}

@@ -188,7 +188,7 @@ const Dashboard = ({data}) => {
                     </div>
                 ) : <NoData title='Products Still Empty'/>}
             </section>
-            {data.data.length > 5 && <Pagination 
+            {formattedDataBySearch.length > 5 && <Pagination 
                                 page={page} 
                                 setPage={setPage} 
                                 dataLength={(dataSliced * page) >= (formattedDataBySearch.length)}/>}

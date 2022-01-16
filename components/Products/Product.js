@@ -15,7 +15,7 @@ const Product = ({item}) => {
     }
 
     return (
-        <div className={`min-h-[200px] md:min-h-[350px] shadow-md cursor-pointer hover:transform ${item?.status !== 'soldout' && 'hover:-translate-y-1'} transition duration-200 relative overflow-hidden flex flex-col group`} onClick={() => item?.status !== 'soldout' && router.push(`/${item._id}`)}>
+        <div className={`min-h-[200px] md:min-h-[350px] shadow-md cursor-pointer hover:transform ${item?.status !== 'soldout' && 'hover:-translate-y-1'} transition duration-200 relative overflow-hidden flex flex-col group`} onClick={() => item?.status !== 'soldout' && router.push(`/sneakers/${item._id}`)}>
             {item?.status === 'soldout' && (
                 <>
                     <div className='absolute w-[140px] h-[40px] bg-red-500 text-white z-30 flex-center rounded transform -rotate-45 top-3 -left-10'>

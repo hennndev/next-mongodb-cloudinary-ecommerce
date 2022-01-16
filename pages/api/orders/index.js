@@ -2,9 +2,8 @@ import clientPromise from "lib/mongodb";
 import { v4 as uuid } from 'uuid'
 
 
-
 export default async function handler(req, res) {
-
+    
     const client = await clientPromise
 
     if(req.method === 'POST') {
@@ -29,7 +28,6 @@ export default async function handler(req, res) {
 
     if(req.method === 'GET') {
         const db = client.db()
-        console.log(req.query.email)
         const allOrders = await db.collection('orders').find({}).toArray()
         res.status(200).json({message: 'Success get data orders', data: allOrders})
     }

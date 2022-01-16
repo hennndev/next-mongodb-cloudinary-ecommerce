@@ -12,7 +12,7 @@ const EditOrders = ({handleClose, isEdit}) => {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({newStatus: valStatus})
-        }).then(res => res.json()).then(res => {
+        }).then(res => res.json()).then(() => {
             handleClose()
             Router.replace('/dashboard/orders')
         })

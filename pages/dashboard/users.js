@@ -1,21 +1,21 @@
 import React, { useState } from 'react'
 import Head from 'next/head'
+import moment from 'moment'
+import { utilSort } from 'utils/utils'
 import NoData from '@/components/UI/NoData'
 import { getSession } from 'next-auth/react'
-import moment from 'moment'
-import { SwitchVerticalIcon } from '@heroicons/react/outline'
 import SearchInput from '@/components/UI/SearchInput'
 import Pagination from '@/components/Dashboard/Pagination'
 import DashboardLinks from '@/components/UI/DashboardLinks'
+import { SwitchVerticalIcon } from '@heroicons/react/outline'
 
 
 
 const Orders = ({data}) => {
 
-
     const [searchTerm, setSearchTerm] = useState('')   
     const [isSort, setIsSort] = useState(false)
-    const [dataSliced] = useState(10)
+    const [dataSliced] = useState(5)
     const [page, setPage] = useState(1)
     const [dataSort, setDataSort] = useState('createdAt')
     
@@ -34,70 +34,56 @@ const Orders = ({data}) => {
     return (
         <>
             <Head>
-                <title>Dashboard Admin Users | TheSneakers</title>
+                <title>Dashboard Admin | TheSneakers</title>
                 <link rel="icon" href="/favicon.ico" />
             </Head>
 
             <section className="my-10">
                 <DashboardLinks/>
                 <div className='my-5 flex'>
-                    <SearchInput 
-                        searchTerm={searchTerm} 
+                    <SearchInput searchTerm={searchTerm}
                         handleChange={(e) => setSearchTerm(e.target.value)}
-                        placeholder="Type to search orders by (order_id, name, status)"/>
+                        placeholder="Type to search users by (username, email, createdAt)"/>
                 </div>
                 {data.data.length > 0 ? (
                     <div className='w-full overflow-auto scrollbar-hide'>
                         <table className='w-full border-b border-gray-200 shadow-lg'>
                             <thead className="bg-gray-100">
                                 <tr>
-                                    <th className="px-3 py-2 text-xs text-gray-500">
+                                    <th className="th-table">
                                         No
                                     </th>
-                                    <th className="px-3 py-2 text-xs text-gray-500 relative group">
-                                        Date
+                                    <th className="th-table relative group">
+                                        Created At
                                         <SwitchVerticalIcon className='h-4 absolute right-2 bottom-2 hidden group-hover:block cursor-pointer' onClick={() => handleSort('createdAt')}/>
                                     </th>
-                                    <th className="px-3 py-2 text-xs text-gray-500 relative group">
-                                        Name
+                                    <th className="th-table relative group">
+                                        Username
                                         <SwitchVerticalIcon className='h-4 absolute right-2 bottom-2 hidden group-hover:block cursor-pointer' onClick={() => handleSort('username')}/>
                                     </th>
-                                    <th className="px-3 py-2 text-xs text-gray-500 relative group">
+                                    <th className="th-table relative group">
                                         Email
                                         <SwitchVerticalIcon className='h-4 absolute right-2 bottom-2 hidden group-hover:block cursor-pointer' onClick={() => handleSort('email')}/>
                                     </th>
                                 </tr>
                             </thead>
-                            <tbody className="bg-white">
-                                {formattedDataBySearch.sort((a,b) => {
-                                    if(!isSort) {
-                                        if(dataSort === 'createdAt') {
-                                            return new Date(b[dataSort]) - new Date(a[dataSort])
-                                        } else {
-                                            return b[dataSort].localeCompare(a[dataSort])
-                                        }
-                                    } else {
-                                        if(dataSort === 'createdAt') {
-                                            return new Date(a[dataSort]) - new Date(b[dataSort])
-                                        } else {
-                                            return a[dataSort].localeCompare(b[dataSort])
-                                        }
-                                    }
-                                }).map((data, idx) => (
+                            <tbody className="bg-white text-gray-700">
+                                {utilSort(formattedDataBySearch, isSort, dataSort)
+                                .slice((page - 1) * dataSliced, (dataSliced * page)).map((data, idx) => (
                                     <tr className="whitespace-nowrap" key={data._id}>
-                                        <td className="px-3 py-4 text-sm text-gray-500 text-center">
+                                        <td className="td-table text-gray-500 text-center">
                                             {idx + 1 + (dataSliced * (page - 1))}
                                         </td>
-                                        <td className="px-3 py-4 text-sm text-gray-500 flex items-center justify-center">
+                                        <td className="td-table text-gray-500 flex items-center justify-center">
                                             {moment(data.createdAt).format('LLL')}
                                         </td>
-                                        <td className="px-3 py-4 text-center">
-                                            <div className="text-sm text-gray-900">
+                                        <td className="td-table text-center">
+                                            <div className="text-gray-800 font-semibold">
                                                 {data.username}
                                             </div>
                                         </td>
-                                        <td className="px-3 py-4 text-center">
-                                            <div className='text-sm font-semibold'>
+                                        <td className="td-table text-center">
+                                            <div className='font-semibold'>
                                                 {data.email}
                                             </div>
                                         </td>
@@ -109,7 +95,7 @@ const Orders = ({data}) => {
                 ) : <NoData title='No Users'/>}
             </section>
 
-            {formattedDataBySearch.length > 10 && <Pagination 
+            {formattedDataBySearch.length > 5 && <Pagination 
                                 page={page} 
                                 setPage={setPage} 
                                 dataLength={(dataSliced * page) >= (formattedDataBySearch.length)}/>}

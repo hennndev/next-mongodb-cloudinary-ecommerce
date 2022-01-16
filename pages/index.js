@@ -1,6 +1,7 @@
 import Head from 'next/head'
 import { useState } from 'react'
 import NoData from '@/components/UI/NoData'
+import { fetchAPI } from 'utils/utils'
 import Products from '@/components/Products/Products'
 import Pagination from '@/components/Dashboard/Pagination'
 
