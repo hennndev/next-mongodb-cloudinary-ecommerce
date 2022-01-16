@@ -45,12 +45,11 @@ export default function Home({data}) {
 
 
 export const getStaticProps = async() => {
-    const res = await fetch('http://localhost:3000/api/products')
-    const data = await res.json()
-
+    const data = await fetchAPI('products')
     const sortingDataByDate = data.data.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
 
     return {
-        props: { data: sortingDataByDate }
+        props: { data: sortingDataByDate },
+        revalidate: 60
     }
 }

@@ -2,6 +2,7 @@ import React, { useEffect } from 'react'
 import Head from 'next/head'
 import Router from 'next/router'
 import { useData } from 'context/context'
+import { getSession } from 'next-auth/react'
 import CheckoutItem from '@/components/Checkout/CheckoutItem'
 import CheckoutForm from '@/components/Checkout/CheckoutForm'
 
@@ -49,6 +50,22 @@ const Checkout = () => {
             </section>
         </>
     )
+}
+
+
+export const getServerSideProps = async(ctx) => {
+    const session = await getSession(ctx)
+
+    if(!session) {
+        return {
+            redirect: {
+                destination: '/'
+            }
+        }
+    }
+    return {
+        props: {}
+    }
 }
 
 export default Checkout

@@ -1,12 +1,12 @@
 import React, { useState } from 'react'
 import Head from 'next/head'
 import Image from 'next/image'
-import { utilSort } from 'utils/utils'
 import { useRouter} from 'next/router'
 import { useData } from 'context/context'
 import Modal from '@/components/UI/Modal'
 import NoData from '@/components/UI/NoData'
 import { getSession } from 'next-auth/react'
+import { utilSort, fetchAPI } from 'utils/utils'
 import SearchInput from '@/components/UI/SearchInput'
 import RequestModal from '@/components/UI/RequestModal'
 import SuccessModal from '@/components/UI/SuccessModal'
@@ -203,9 +203,7 @@ const Dashboard = ({data}) => {
 
 
 export const getServerSideProps =  async(ctx) => {
-    const res = await fetch('http://localhost:3000/api/products')
-    const data = await res.json()
-
+    const data = await fetchAPI('products')
     const session = await getSession(ctx)
 
     if(session?.user?.email !== 'admin@admin.com') {
@@ -215,8 +213,6 @@ export const getServerSideProps =  async(ctx) => {
             }
         }
     }
-
-
     return {
         props: {
             data

@@ -3,10 +3,10 @@ import Head from 'next/head'
 import moment from 'moment'
 import Image from 'next/image'
 import Router from 'next/router'
-import { utilSort } from 'utils/utils'
 import Modal from '@/components/UI/Modal'
 import NoData from '@/components/UI/NoData'
 import { getSession } from 'next-auth/react'
+import { utilSort, fetchAPI } from 'utils/utils'
 import EditOrders from '@/components/Dashboard/EditOrders'
 import { SwitchVerticalIcon } from '@heroicons/react/outline'
 import SearchInput from '@/components/UI/SearchInput'
@@ -193,8 +193,7 @@ const Orders = ({data}) => {
 
 
 export const getServerSideProps =  async(ctx) => {
-    const res = await fetch('http://localhost:3000/api/orders')
-    const data = await res.json()
+    const data = await fetchAPI('orders')
 
     const session = await getSession(ctx)
     if(session?.user?.email !== 'admin@admin.com') {

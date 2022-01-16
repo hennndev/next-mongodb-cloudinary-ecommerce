@@ -1,4 +1,4 @@
-
+import { apiRoute } from 'config/config'
 
 export const utilSort = (data, isSort, dataSort) => {
     return data.sort((a, b) => {
@@ -20,8 +20,8 @@ export const utilSort = (data, isSort, dataSort) => {
 }
 
 
-export const fetchAPI = async() => {
-    const res = await fetch('/api/products')
+export const fetchAPI = async(route) => {
+    const res = await fetch(`${apiRoute}/api/${route}`)
     const data = await res.json()
 
     return data

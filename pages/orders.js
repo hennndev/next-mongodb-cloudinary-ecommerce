@@ -3,6 +3,7 @@ import Head from 'next/head'
 import moment from 'moment'
 import Image from 'next/image'
 import Router from 'next/router'
+import { fetchAPI } from 'utils/utils'
 import Modal from '@/components/UI/Modal'
 import { getSession } from 'next-auth/react'
 import RequestModal from '@/components/UI/RequestModal'
@@ -153,9 +154,7 @@ const Orders = ({data}) => {
 
 export const getServerSideProps = async (ctx) => {
     const session = await getSession(ctx)
-    const res = await fetch(`http://localhost:3000/api/orders`)
-    const data = await res.json()
-
+    const data = await fetchAPI('orders')
 
     if(!session?.user || session?.user?.email === 'admin@admin.com') {
         return {
@@ -164,7 +163,6 @@ export const getServerSideProps = async (ctx) => {
             }
         }
     }
-
     const dataUser = data.data.filter(order => order.email === session?.user?.email)
                         .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
 
