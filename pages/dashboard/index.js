@@ -204,13 +204,8 @@ const Dashboard = ({data}) => {
 
 export const getServerSideProps =  async(ctx) => {
     const session = await getSession(ctx)
-    let data = null
-    try {
-        data = await fetchAPI('products')
-    } catch (error) {
-        data = null        
-    }
-
+    const data = await fetchAPI('products')
+   
     if(session?.user?.email !== 'admin@admin.com') {
         return {
             redirect: {

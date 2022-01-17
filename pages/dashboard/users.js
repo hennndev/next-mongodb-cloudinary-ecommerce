@@ -107,12 +107,8 @@ const Orders = ({data}) => {
 
 export const getServerSideProps =  async(ctx) => {
     const session = await getSession(ctx)
-    let data = null
-    try {
-        data = await fetchAPI('users')
-    } catch (error) {
-        data = null
-    }
+    const data = await fetchAPI('users')
+    
     if(session?.user?.email !== 'admin@admin.com') {
         return {
             redirect: {

@@ -154,14 +154,10 @@ const Orders = ({data}) => {
 
 export const getServerSideProps = async (ctx) => {
     const session = await getSession(ctx)
-    let dataUser = null
-    try {
-        const data = await fetchAPI('orders')
-        dataUser = data.data.filter(order => order.email === session?.user?.email)
-                            .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
-    } catch (error) {
-        dataUser = null        
-    }
+
+    const data = await fetchAPI('orders')
+    const dataUser = data.data.filter(order => order.email === session?.user?.email)
+                        .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
 
     if(!session?.user || session?.user?.email === 'admin@admin.com') {
         return {
@@ -170,7 +166,6 @@ export const getServerSideProps = async (ctx) => {
             }
         }
     }
-
     return {
         props: {
             data: dataUser

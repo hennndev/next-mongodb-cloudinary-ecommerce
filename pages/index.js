@@ -41,13 +41,6 @@ export default function Home({data}) {
 
 
 export const getStaticProps = async() => {
-    // let formattedData = null
-    // try {
-    //     const data = await fetchAPI('products')
-    //     formattedData = data.data.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
-    // } catch (error) {
-    //     formattedData = null   
-    // }
     const data = await fetchAPI('products')
     const formattedData = data.data.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
 

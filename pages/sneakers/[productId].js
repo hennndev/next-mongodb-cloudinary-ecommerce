@@ -52,15 +52,10 @@ const ProductDetail = ({data}) => {
 }
 
 export const getStaticPaths = async () => {
-    let paths = 'abcde'
-    try {
-        const data = await fetchAPI('products')  
-        paths = data.data.map(product => ({
-            params: { productId: product._id }
-        }))
-    } catch (error) {
-        paths = [{params: {productId: 'abcde'}}]
-    }   
+    const data = await fetchAPI('products')  
+    paths = data.data.map(product => ({
+        params: { productId: product._id }
+    }))
 
     return {
         paths,
