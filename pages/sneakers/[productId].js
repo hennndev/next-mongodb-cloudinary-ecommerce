@@ -53,7 +53,7 @@ const ProductDetail = ({data}) => {
 
 export const getStaticPaths = async () => {
     const data = await fetchAPI('products')  
-    paths = data.data.map(product => ({
+    const paths = data.data.map(product => ({
         params: { productId: product._id }
     }))
 
