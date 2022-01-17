@@ -18,14 +18,14 @@ export default function Home({data}) {
             </Head>
 
             <section className='mt-10 mb-5'>
-                {data.length > 0 ? (
+                {data && data.length > 0 ? (
                     <Products data={data} dataSliced={dataSliced} page={page}/>
                 ) : (
                     <NoData title='Oops Sorry, Our Products Still Empty :('/>
                 )}
             </section>
             <section className="mt-10">
-                {data.length > dataSliced && (
+                {data && data.length > dataSliced && (
                     <Pagination 
                         home 
                         page={1} 
@@ -41,8 +41,13 @@ export default function Home({data}) {
 
 
 export const getStaticProps = async() => {
-    const data = await fetchAPI('products')
-    const formattedData = data.data.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
+    let formattedData = null
+    try {
+        const data = await fetchAPI('products')
+        formattedData = data.data.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
+    } catch (error) {
+        formattedData = null   
+    }
 
     return {
         props: { data: formattedData },
