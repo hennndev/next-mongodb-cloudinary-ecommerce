@@ -107,7 +107,7 @@ const Dashboard = ({data}) => {
                         placeholder="Type to search product (name, price, status)"
                         handleChange={(e) => setSearchTerm(e.target.value)}/>
                 </div>
-                {data.data.length > 0 ? (
+                {data && data.data.length > 0 ? (
                     <div className='w-full overflow-auto scrollbar-hide shadow-lg'>
                         <table className='w-full border-b border-gray-200'>
                             <thead className="bg-gray-100">
@@ -203,8 +203,13 @@ const Dashboard = ({data}) => {
 
 
 export const getServerSideProps =  async(ctx) => {
-    const data = await fetchAPI('products')
     const session = await getSession(ctx)
+    let data = null
+    try {
+        data = await fetchAPI('products')
+    } catch (error) {
+        data = null        
+    }
 
     if(session?.user?.email !== 'admin@admin.com') {
         return {

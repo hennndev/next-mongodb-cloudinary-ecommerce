@@ -45,7 +45,7 @@ const Orders = ({data}) => {
                         handleChange={(e) => setSearchTerm(e.target.value)}
                         placeholder="Type to search users by (username, email, createdAt)"/>
                 </div>
-                {data.data.length > 0 ? (
+                {data && data.data.length > 0 ? (
                     <div className='w-full overflow-auto scrollbar-hide'>
                         <table className='w-full border-b border-gray-200 shadow-lg'>
                             <thead className="bg-gray-100">
@@ -106,9 +106,13 @@ const Orders = ({data}) => {
 
 
 export const getServerSideProps =  async(ctx) => {
-    const data = await fetchAPI('users')
     const session = await getSession(ctx)
-
+    let data = null
+    try {
+        data = await fetchAPI('users')
+    } catch (error) {
+        data = null
+    }
     if(session?.user?.email !== 'admin@admin.com') {
         return {
             redirect: {

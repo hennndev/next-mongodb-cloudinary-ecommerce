@@ -68,9 +68,9 @@ const Orders = ({data}) => {
                 </Modal>
             )}
             <section className="my-6">
-                {data.length > 0 && <h1 className="text-center text-blue-400 text-2xl font-medium mb-5 underline">My Orders</h1>}
+                {data && data.length > 0 && <h1 className="text-center text-blue-400 text-2xl font-medium mb-5 underline">My Orders</h1>}
                 <div className='flex flex-col space-y-10'>
-                   {data.length > 0 ? data.map(order => (
+                   {data && data.length > 0 ? data.map(order => (
                         <div className='bg-white shadow-md rounded p-5 flex flex-col' key={order._id}>
                             <h1 className='mb-3'>Order Id: 
                                 <span className='font-medium bg-blue-50 rounded-full p-2 leading-10'>   {order.order_id}
@@ -154,7 +154,14 @@ const Orders = ({data}) => {
 
 export const getServerSideProps = async (ctx) => {
     const session = await getSession(ctx)
-    const data = await fetchAPI('orders')
+    let dataUser = null
+    try {
+        const data = await fetchAPI('orders')
+        dataUser = data.data.filter(order => order.email === session?.user?.email)
+                            .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
+    } catch (error) {
+        dataUser = null        
+    }
 
     if(!session?.user || session?.user?.email === 'admin@admin.com') {
         return {
@@ -163,8 +170,6 @@ export const getServerSideProps = async (ctx) => {
             }
         }
     }
-    const dataUser = data.data.filter(order => order.email === session?.user?.email)
-                        .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
 
     return {
         props: {
